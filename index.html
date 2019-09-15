@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <meta name="description" content="Content description">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
+    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
+    <script type="text/javascript" src="js/dataTables.moment.js"></script>    
+    <script type="text/javascript" src="data.js"></script>
+    <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/95c75768/cloudflare-static/rocket-loader.min.js" data-cf-settings="1ca48e2616a63a1090f63abd-|49" defer=""></script></body>
+  </head>
+
+<style>
+    body {
+        font: 70%/1.45em "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif !important;
+    } 
+
+    .all-wrapper {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .page-item.active .page-link {
+        background-color: #ff2da1;
+        border-color: #ff2da1;
+    }
+    .page-link {
+        color: #ff2da1;
+    }
+    .page-item.disabled .page-link {
+        color: #ff2da1;
+    }    
+    .page-link:hover {
+        color: #ff2da1;
+        background-color: #ffdef0;
+    }    
+
+    .cards tbody tr {
+        float: left;
+        width: 14rem;
+        margin: 0.3rem;
+        border: 0.0625rem solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        box-shadow: 0.2rem 0.2rem 0.3rem rgba(0,0,0,0.25);
+    }
+    .cards tbody td {
+        display: block;
+    }
+    
+    .cards td:before {
+        content: attr(data-label);
+        display: inline;
+        position: relative;
+        font-size: 75%;
+        float: left;
+        color: #808080;
+        min-width: 4rem;
+        margin-left: 0;
+        margin-right: 0.5rem;
+        text-align: left;
+    }
+
+    table#table1.dataTable tbody tr:hover {
+        background-color: #ff2da1;
+        color: #fff;
+    }
+
+    table#table1.dataTable tbody tr:hover > .sorting_1 {
+        background-color: #ff2da1;
+        color: #fff;
+    }
+
+    table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
+        display: none;
+    }
+
+    table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child {
+        padding-left: 0px;
+        text-align: center;
+    }
+
+    #table1-filter, #table1-info, #table1-pagination, #table1-length {
+        display: inline-block;
+    }
+    #table1-filter, #table1-pagination {
+        float: right;
+    }
+    #table1-btn {
+        margin: 20px 0px;
+        float: left;
+    }
+    #table1-filter input {
+        font-size: 0.7rem;
+        width:211px;
+    }
+
+    .filter-column {
+        padding:10px;
+        border-left: 1px solid #dee2e6;
+    }     
+    #filter-language-2, #filter-btn {
+        border-left: 0px;
+    }
+    .filter-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        margin:20px 0px;
+    }
+    .filter-label {
+        margin:10px 0px;
+        font-weight: bold;
+    }  
+    #filter-btn {
+        align-self: center;
+    }
+
+    #card-toggle {        
+        color: #fff;
+        background-color: #ff2da1;
+        border-color: #ff2da1;
+    }
+    #card-toggle:focus {
+        box-shadow: 0 0 0 0.2rem #ffdef0;
+    }
+
+</style>
+<body>
+<div class="all-wrapper">    
+    <div class="filter-wrapper">
+        <div class="filter-column" id="filter-btn">
+            <button class="btn btn-secondary" id="card-toggle">
+                <i class="fa fa-id-card fa-fw fa-2x" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="filter-column" id="filter-category">
+            <div class="filter-label">Category</div>
+            <input type="checkbox" class="filter-box" name="category" value="Analytics">Analytics<br>
+            <input type="checkbox" class="filter-box" name="category" value="Community">Community<br>
+            <input type="checkbox" class="filter-box" name="category" value="Content publisher">Content publisher<br>
+            <input type="checkbox" class="filter-box" name="category" value="Editorial tools">Editorial tools<br>
+        </div>
+        <div class="filter-column" id="filter-location">
+            <div class="filter-label">Location</div>
+            <input type="checkbox" class="filter-box" name="location" value="Kuala Lumpur-Malaysia">Kuala Lumpur-Malaysia<br>
+            <input type="checkbox" class="filter-box" name="location" value="Singapore">Singapore<br>
+            <input type="checkbox" class="filter-box" name="location" value="Bangkok-Thailand">Bangkok-Thailand<br>
+            <input type="checkbox" class="filter-box" name="location" value="New Delhi-India">New Delhi-India<br>
+            <input type="checkbox" class="filter-box" name="location" value="Jakarta-Indonesia">Jakarta-Indonesia<br>
+            <input type="checkbox" class="filter-box" name="location" value="Manila-The Philippines">Manila-Philippines<br>
+            <input type="checkbox" class="filter-box" name="location" value="Hanoi-Vietnam">Hanoi-Vietnam<br>
+        </div>
+        <div class="filter-column" id="filter-businessType">
+            <div class="filter-label">Business type</div>
+            <input type="checkbox" class="filter-box" name="businessType" value="Non-profit">Non-profit<br>
+            <input type="checkbox" class="filter-box" name="businessType" value="Private Limited">Private Limited<br>
+        </div>
+        <div class="filter-column" id="filter-age">
+            <div class="filter-label">Founded</div>
+            <input type="checkbox" class="filter-box" name="age" value="0,2">0-2 years<br>
+            <input type="checkbox" class="filter-box" name="age" value="3,5">3-5 years<br>
+            <input type="checkbox" class="filter-box" name="age" value="6,10">6-10 years<br>
+            <input type="checkbox" class="filter-box" name="age" value="11,15">11-15 years<br>
+            <input type="checkbox" class="filter-box" name="age" value="16,29">>15 years<br>
+        </div>
+        <!-- <div class="filter-column" id="filter-language">
+            <div class="filter-label">Language</div>
+            <input type="checkbox" class="filter-box" name="language" value="Bahasa Indonesia">Bahasa Indonesia<br>
+            <input type="checkbox" class="filter-box" name="language" value="Bengali">Bengali<br>
+            <input type="checkbox" class="filter-box" name="language" value="Burmese">Burmese<br>
+            <input type="checkbox" class="filter-box" name="language" value="English">English<br>
+            <input type="checkbox" class="filter-box" name="language" value="Hindi">Hindi<br>
+            <input type="checkbox" class="filter-box" name="language" value="Khmer">Khmer<br>
+        </div>
+        <div class="filter-column" id="filter-language-2">
+            <div class="filter-label" style="visibility: hidden">Language</div>
+            <input type="checkbox" class="filter-box" name="language" value="Malay">Malay<br>
+            <input type="checkbox" class="filter-box" name="language" value="Mandarin">Mandarin<br>
+            <input type="checkbox" class="filter-box" name="language" value="Tagalog">Tagalog<br>
+            <input type="checkbox" class="filter-box" name="language" value="Thai">Thai<br>
+            <input type="checkbox" class="filter-box" name="language" value="Vietnamese">Vietnamese<br>
+            <input type="checkbox" class="filter-box" name="language" value="Others">Others<br>
+        </div> -->
+        <div class="filter-column" id="filter-funding">
+            <div class="filter-label">Latest funding type</div>
+            <input type="checkbox" class="filter-box" name="funding" value="Seed">Seed<br>
+            <input type="checkbox" class="filter-box" name="funding" value="Bootstrapping">Bootstrap<br>
+            <input type="checkbox" class="filter-box" name="funding" value="Series A">Series A<br>
+            <input type="checkbox" class="filter-box" name="funding" value="Series B">Series B<br>
+            <input type="checkbox" class="filter-box" name="funding" value="Series C">Series C<br>
+        </div>
+        <div class="filter-column" id="filter-needs">
+            <div class="filter-label">Current needs</div>
+            <input type="checkbox" class="filter-box" name="needs" value="Funding">Funding<br>
+            <input type="checkbox" class="filter-box" name="needs" value="Mentors">Mentors<br>
+            <input type="checkbox" class="filter-box" name="needs" value="Partners">Partners<br>
+            <input type="checkbox" class="filter-box" name="needs" value="Training">Training<br>
+            <input type="checkbox" class="filter-box" name="needs" value="Others">Others<br>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="table1" class="table row-border" cellspacing="0" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="Logo">Logo</th>
+                    <th class="Name">Name</th>
+                    <th class="Category">Category</th>
+                    <th class="Location">Location(s)</th>
+                    <th class="About">About</th>
+                    <th class="Business-name">Business name</th>
+                    <th class="Business-type">Business type</th>
+                    <th class="Language">Language(s)</th>
+                    <th class="Contact-details">Contact details</th>
+                    <th class="Founded">Founded</th>
+                    <th class="Founder">Founder(s)</th>
+                    <th class="Staff-size">Staff size</th>
+                    <th class="Latest-funding-type">Latest funding type</th>
+                    <th class="Investors">Investors</th>
+                    <th class="Amount">Amount</th>
+                    <th class="Shares">Shares</th>
+                    <th class="Funding-date">Funding date</th>
+                    <th class="Current-needs">Current needs</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.fn.dataTable.moment( 'YYYY' );
+        var table = $("#table1").DataTable({
+            dom: '<".table1-filter-row"<"#table1-length"l><"#table1-filter"f>><".table1-filter-row"<"#table1-info"i><"#table1-pagination"p>><t>',
+            pageLength: 10,
+            lengthMenu: [ [10, 100, 250, 500, -1], [10, 100, 250, 500, "All"] ],
+            "language": {
+                search: "<i class='fas fa-search fa-lg' style='color:#ff2da1'></i>",
+                searchPlaceholder: "Search the whole database",
+            },
+            data: dataset,
+            responsive: true,
+            columnDefs: [
+                { responsivePriority: 1, targets: "Name" },
+                { responsivePriority: 2, targets: "Category" },
+                { responsivePriority: 3, targets: "Location" },
+                { responsivePriority: 4, targets: "Founded" },
+                { responsivePriority: 5, targets: "Staff-size" },
+                { responsivePriority: 6, targets: "Business-type" },
+                { responsivePriority: 7, targets: "Funding-date" },
+                { responsivePriority: 8, targets: "Current-needs" },
+                { responsivePriority: 9, targets: "Language"},
+                { responsivePriority: 10, targets: "Latest-funding-type" },
+                { responsivePriority: 11, targets: "Shares" },
+                { responsivePriority: 12, targets: "Amount"},
+                { responsivePriority: 13, targets: "Investors" },
+                { responsivePriority: 14, targets: "Business-name" },
+                { responsivePriority: 15, targets: "Founder" },
+                { responsivePriority: 16, targets: "Contact-details" },
+                { responsivePriority: 17, targets: "About" },
+                { responsivePriority: 18, targets: "Logo" },
+            ],            
+            "drawCallback": function( settings ) {
+                console.log('drawn');
+                if($("#table1").hasClass("cards")){
+                    // Create an array of labels containing all table headers
+                    var labels = [];
+                    $("#table1").find("thead th").each(function() {
+                        labels.push($(this).text());
+                    });
+
+                    // Add data-label attribute to each cell
+                    $("#table1").find("tbody tr").each(function() {
+                        $(this).find("td").each(function(column) {
+                            //mark the hidden and shown tr due to responsiveness
+                            if ($(this).css("display") == "none"){
+                                $(this).attr("title","hide");
+                            } else {$(this).attr("title","show");}
+                            //show all td in card format
+                            $(this).attr("data-label", labels[column]);
+                            if ($(this).attr("title") == "hide"){
+                                $(this).css("display", "block");
+                            }
+                            //hide the row border line
+                            $(this).css("border-width","0px");
+                            //hide the column label
+                            var hiddenLabels = ["Logo", "Name", "Category", "Location(s)","About","Business name","Business type", "Language(s)", "Contact details"];
+                            for (var i = 0; i < hiddenLabels.length; i++) {
+                                if ($(this).attr("data-label") == hiddenLabels[i]){
+                                    $(this).attr("data-label", "");
+                                }
+                            }        
+                        });
+                        //draw a line at the bottom of specific td when viewed in card format, only for once
+                        if ($(this).find("td:eq(4)").hasClass("lineAdded") ) {} else {
+                            $(this).find("td:eq(4)").append("<hr>");
+                            $(this).find("td:eq(8)").append("<hr>");
+                            $(this).find("td:eq(4)").addClass("lineAdded");
+                        } 
+                    });
+
+                    var max = 0;
+                    $("#table1 tr").each(function() {
+                        max = Math.max($(this).height(), max);
+                    }).height(max);
+
+                } else {
+                    // Remove data-label attribute from each cell
+                    $("#table1").find("td").each(function() {
+                        $(this).removeAttr("data-label");
+                        //hide the hidden td in table format
+                        if ($(this).attr("title") == "hide"){
+                            $(this).css("display", "none");
+                        }
+                        $(this).css("border-width","1px");
+                    });
+
+                    $("#table1 tr").each(function(){
+                        $(this).height("auto");
+                    });
+                    
+                }
+            }
+        })
+        .on("select", function (e, dt, type, indexes) {
+            var rowData = table.rows(indexes).data().toArray()
+            $("#row-data").html(JSON.stringify(rowData))
+        })
+        .on("deselect", function () {
+            $("#row-data").html("")
+        })
+
+        $("#card-toggle").on("click",
+            function (){
+                $("#table1").toggleClass("cards");
+                $("#table1 thead").toggle();
+                $("#card-toggle .fa").toggleClass(["fa-list", "fa-id-card"]);
+                table.draw('page');
+        });
+
+        $('input:checkbox').on('change', function () {
+            //build a regex filter string with an or(|) condition
+            var category = $('input:checkbox[name="category"]:checked').map(function() {
+                return this.value;
+            }).get().join('|');
+
+            //filter in column category, with regex, no smart filtering, case sensitive
+            table.columns(2).search(category, true, false, true).draw(false);
+
+            var location = $('input:checkbox[name="location"]:checked').map(function() {
+                return this.value;
+            }).get().join('|');
+            table.columns(3).search(location, true, false, true).draw(false);
+
+            var businessType = $('input:checkbox[name="businessType"]:checked').map(function() {
+                return this.value;
+            }).get().join('|');
+            table.columns(6).search(businessType, true, false, true).draw(false);
+
+            var language = $('input:checkbox[name="language"]:checked').map(function() {
+                return this.value;
+            }).get().join('|');
+            table.columns(7).search(language, true, false, true).draw(false);
+
+            var funding = $('input:checkbox[name="funding"]:checked').map(function() {
+                return this.value;
+            }).get().join('|');
+            table.columns(12).search(funding, true, false, true).draw(false);
+
+            var needs = $('input:checkbox[name="needs"]:checked').map(function() {
+                return this.value;
+            }).get().join('|');
+            table.columns(17).search(needs, true, false, true).draw(false);
+            console.log("needs = " + needs);
+
+            var age = [];
+            $.each($('input[name="age"]:checked'), function(){  
+                var arrAge = (this.value).split(",");
+                var currentYear = moment().year();
+                var loopNum = arrAge[1]-arrAge[0]+1;
+                for (var i = 0; i < loopNum; i++) {
+                    age.push(currentYear-(parseInt(arrAge[0])+i));
+                }
+            });
+            var ageRange = age.join('|');
+            table.columns(9).search(ageRange, true, false, true).draw(false);
+        });
+        
+//for smart searching, read this: https://datatables.net/reference/api/columns().search() and this https://datatables.net/reference/api/column().search()
+//a is the number of the column, starts with 0
+        function searchTable (a, b){
+            table
+                .column( a )
+                .search( b )
+                .draw();
+        }
+
+        function resumeTable (){ 
+            table
+                .columns()
+                .search( "" )
+                .draw();
+        }
+
+//filter continous values, different from searching a word
+        function filterTable (){ 
+            table
+                .column( 0 )
+                .data()
+                .filter( function ( value, index ) {
+                    return value > 20 ? true : false;
+                } );
+        }
+        
+    });    
+    </script>
+</body>
+</html>
