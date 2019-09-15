@@ -273,7 +273,6 @@
                 { responsivePriority: 18, targets: "Logo" },
             ],            
             "drawCallback": function( settings ) {
-                console.log('drawn');
                 if($("#table1").hasClass("cards")){
                     // Create an array of labels containing all table headers
                     var labels = [];
@@ -383,7 +382,6 @@
                 return this.value;
             }).get().join('|');
             table.columns(17).search(needs, true, false, true).draw(false);
-            console.log("needs = " + needs);
 
             var age = [];
             $.each($('input[name="age"]:checked'), function(){  
